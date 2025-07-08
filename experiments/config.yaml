@@ -1,0 +1,40 @@
+model:
+  cnn_encoder:
+    backbone: "densenet121"
+    pretrained: true
+    freeze_backbone: true
+  
+  text_encoder:
+    model_name: "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract"
+    freeze_backbone: true
+  
+  topic_embeddings:
+    embedding_dim: 768
+    vocab_size: 30522
+    
+  image_enhancement:
+    segmentation:
+      backbone: "deeplabv3_plus"
+      num_classes: 2
+    super_resolution:
+      scale_factor: 4
+      num_blocks: 23
+    
+  word_decoder:
+    model_name: "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract"
+    decoder_layers: 12
+    
+training:
+  batch_size: 32
+  learning_rate: 0.0001
+  num_epochs: 100
+  device: "cuda"
+  scheduler:
+    type: CosineAnnealingLR
+    T_max: 20
+    eta_min: 0.00001
+  
+data:
+  image_size: 512
+  max_text_length: 1024
+  path: "data"
